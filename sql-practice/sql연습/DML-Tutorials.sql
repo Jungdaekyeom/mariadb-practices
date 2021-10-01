@@ -7,7 +7,7 @@ drop table pet;
 create table pet(
 	name varchar(20),
     owner varchar(20),
-    sepecies varchar(20),
+    species varchar(20),
     gender char(1),
     birth DATE,
     death DATE
@@ -23,7 +23,40 @@ select name, owner, species, birth, death from pet;
 insert into pet value('마오', '정대겸', 'cat', 'w', '2018-08-05', null);
 
 -- 데이터 삭제(delete)
-delete 	from pet where name = '정대겸';
+delete from pet where name = '마오';
 
 -- load data local infile
-load data local infile 'C:\douzone2021\03.자료\MySQL\pet.txt' into table pet;
+load data local infile 'C:\\pet.txt' into table pet;
+
+-- update death
+update pet set death = null where name != 'Bowser';
+
+-- 전체 출력
+select * from pet;
+
+-- 조회연습1: where 절
+
+-- 1990년 이후에 태어난 아이들은?
+select name, species, birth from pet where birth > '1900-12-31';
+
+-- Gwen과 함께 사는 아이들은?
+select name, species, owner from pet where owner = 'Gwen';
+
+-- null 다루기 1 : 살아있는 애들은?
+select name, birth, death from pet where death is null;
+
+-- null 다루기 2 : 살아있는 애들은?
+select name, birth, death from pet where death is not null;
+
+-- like 검색(패턴 매칭) : 이름이 b로 시작하는 아이들은?
+select name from pet where name like 'b%';
+
+-- like 검색(패턴 매칭) : 이름이 b로 시작하는 아이들 중에 이름이 6자인 아이는?
+select name from pet where name like 'b_____';
+
+-- 집계(통계) 함수
+select count(*) from pet;
+
+select count(death) from pet;
+select count(*) from pet where death is not null;
+
