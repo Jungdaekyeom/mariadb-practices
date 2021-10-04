@@ -26,7 +26,7 @@ and b.title = 'engineer';	 -- row 선택 조건 3
 -- 1) natural join
 -- 두 테이블에 공통 컬럼이 있으면 별다른 조건 없이 암묵적으로 조인이 됨.
 select a.first_name, b.title
-from employees a natural join title b
+from employees a natural join titles b
 where b.to_date = '9999-01-01'; -- row 선택 조건
 -- on a.emp_no = b.emp_no 생략
 -- 같은 것 : from employees a join title b on a.emp_no = b.emp_no

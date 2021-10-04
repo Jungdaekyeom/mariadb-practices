@@ -53,8 +53,6 @@ order by avg(salary) asc;
 -- salaries 테이블에서 사번이 10060인 직원의 급여 평균과 총합을 출력하세요.
 -- 문법적으로 오류
 -- 의미적으로 맞다(where)
-select avg(salary), sum(salary)
-from salaries
 where emp_no = '10060';
 
 -- 따라서 서브쿼리를 써야함
