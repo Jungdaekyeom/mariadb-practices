@@ -5,12 +5,13 @@
 select avg(salary)
 from salaries;
 
--- 오류!!!!!!!(<-내가 한거 아님, 강사님이 느낌표 붙인거임 ㅠ)
+-- 오류!!!!!!!(느낌표 내가 한거 아님, 강사님이 느낌표 붙인거임 ㅠ)
 -- select 절에 그룹 함수가 있는 경우, 어떤 컬럼도 select 절에 올 수 없다.
 -- emp_no는 아무 의미가 없다.
 -- (10001번의 월급 평균이 63180은 아니므로, 아무 의미가 없다.(사실상 에러))
 select emp_no, avg(salary)
 from salaries;
+
 
 -- query 실행 순서
 -- (1) from : 접근 테이블 확인
