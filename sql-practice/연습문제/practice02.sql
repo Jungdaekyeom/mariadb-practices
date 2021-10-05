@@ -8,7 +8,6 @@
 select max(salary) as '최고임금' , min(salary) as '최저임금', (max(salary)-min(salary)) as '최고임금 - 최저임금' from salaries;
 
 
-
 -- 문제2.
 -- 마지막으로 신입사원이 들어온 날은 언제 입니까? 다음 형식으로 출력해주세요.
 -- 예) 2014년 07월 10일
@@ -19,10 +18,10 @@ select date_format(hire_date, '%Y년 %m월 %d일') as '신입사원이 마지막
 -- 가장 오래 근속한 직원의 입사일은 언제인가요? 다음 형식으로 출력해주세요.
 -- 예) 2014년 07월 10일
 -- 테스트 겸 조인 사용(dept_emp 쓰면 됨.)
-select emp_no, hire_date as '가장 오래된 고인물의 입사일'
-from titles natural join employees
-group by emp_no
-order by if(max(to_date) = '9999-01-01', curdate(), max(to_date)) - min(from_date) desc;
+select e.hire_date as '가장 오래된 고인물의 입사일'
+from titles t join employees e on t.emp_no = e.emp_no
+group by e.emp_no
+order by if(max(to_date) = '9999-01-01', curdate(), max(to_date)) - min(from_date) desc limit 1;
 
     
 -- 내꺼아님. 공부용으로 둥근 태양이 퍼다준거ㅋㅋㅋㅋ1
@@ -36,7 +35,7 @@ from dept_emp t1, (
 ) t2
 where t1.emp_no=t2.emp_no;
 
--- 내꺼아님. 공부용으로 둥근 태양이 퍼다준거ㅋㅋㅋㅋ2
+-- 내꺼아님. 나 공부하라고 둥근 태양이 만들어준거ㅋㅋㅋㅋ2
 select t1.from_date
 from dept_emp t1, (
    select emp_no, timestampdiff(DAY, min(from_date), if (max(to_date)='9999-01-01', curdate(), max(to_date))) as count_day
@@ -83,3 +82,6 @@ floor(period_diff(date_format(curdate(), '%Y%m'), date_format(max(birth_date), '
 from employees;
 
 -- select (period_diff(date_format(curdate(), '%Y'), date_format(max(birth_date), '%Y'))) as '어린놈의쉬키' from employees;
+
+
+select * from dept_emp;
