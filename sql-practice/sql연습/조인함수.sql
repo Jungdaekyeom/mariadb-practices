@@ -65,3 +65,31 @@ select a.name as '이름', ifnull(b.name, '없음') as '부서'
 from emp.a right join dept b on a.dept_no = b.no;
 
 
+-- 실습문제 1
+-- 현재 회사 상황을 반영한 직원별 근무부서를 사번, 이름, 근무 부서로 출력해보세요.
+
+-- 예제6 : 현재 부서별로 현재 직책이 Engineer인 직원들에 대해서만 평균 급여를 구하세요
+select a.dept_no, avg(b.salary)
+from dept_emp a, salaries b, titles c, department d
+where a.emp_no = b.emp_no
+and b.emp_no = c.emp_no
+and a.dept_no = d.dept_no
+and a.to_date = '9999-01-01'
+and b.to_date = '9999-01-01'
+and c.to_date = '9999-01-01'
+and c.title = 'Engineer'
+group by d.dept_name;
+
+-- 예제7: 현재 직책별로 급여의 총합을 구하되, Engineer직책은 제외하세요.
+-- 단, 총합이 2,000,000,000 이상인 직책만 나타내며 급여총합에 대해서 내림차순(desc)로 정렬하세요.
+select a.title, sum(b.salary) as sum_salary
+from titles a, salaries b
+where a.emp_no = b.emp_no
+and a.emp_no = b.emp_noq	
+
+and a.to_date = '9999-01-01'
+and b.to_date = '9999-01-01'
+and a.title != 'Engineer'
+group by a.title
+having sum(b.salary) > 2000000000
+order by sum_salary desc;

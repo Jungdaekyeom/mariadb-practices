@@ -10,7 +10,7 @@ select lower(first_name) from employees;
 
 -- substring(문자열, index, length)
 -- index는 1부터 시작함
-select substring('Hello World', 3);
+select substring('Hello World', 1, 1);
 
 -- 예제) 1989년에 입사한 사원들의 이름, 입사일 출력
 select first_name, hire_date

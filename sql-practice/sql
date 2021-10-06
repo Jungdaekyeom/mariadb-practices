@@ -1,75 +1,82 @@
--- select 연습
-select * from departments;
-select dept_no, dept_name from departments;
+-- 설명
+-- inner join은 조인 조건을 만족하는 값에 대해서만 결과값이 출력 가능
+-- outer join은 조인 조건을 만족하지 않아도 결과값 출력 가능
+-- natural join : ansi / iso sql 1999를 따르는 ansi join 문법.
+-- join~ using : 내추럴 조인을 보완하는 것
 
--- alias(as 생략가능)
--- 예제1:employees 테이블에서 직원의 이름, 성별, 입사일을 출력하라.
-select first_name, gender, hire_date from employees;
-select first_name as '이름', gender as '성별', hire_date as '입사일' from employees;
+-- inner join
+-- 예제1 : employees 테이블과 title 테이블을 join하여 직원의 이름과 직책을 모두 출력
+select a.first_name, b.title
+from employees a, titles b
+where a.emp_no = b.emp_no -- join 조건(n-1개의 조인 조건 필요)
+and b.to_date = '9999-01-01'; -- row 선택 조건
 
--- 예제2: employees 테이블에서 직원의 이름, 성별, 입사일을 출력 + concat 함수
-select concat(first_name, ' ', last_name) as '이름', gender as '성별', hire_date as '입사일' from employees;
+-- 예제2 : employees 테이블과 titles 테이블을 join하여 직원의 이름과 직책을 출력하되, 여성 엔지니어만 출력하세요.
+select a.first_name, b.title
+from employees a, titles b
+where a.emp_no = b.emp_no -- join 조건(n-1개의 조인 조건 필요)
+and b.to_date = '9999-01-01' -- row 선택 조건 1
+and a.gender = 'f'			 -- row 선택 조건 2
+and b.title = 'engineer';	 -- row 선택 조건 3
 
--- distinct
--- 예제: titles 테이블에서 모든 직급의 이름을 출력
-select title from titles; -- 중복이 겹쳐서 나온다.
-select distinct title from titles;
-select distinct (title) from titles;
+--
+-- ANSI/ISO SQL1999 JOIN 표준 문법
+--
 
-select distinct title from titles limit 0,3;
+-- 1) natural join
+-- 두 테이블에 공통 컬럼이 있으면 별다른 조건 없이 암묵적으로 조인이 됨.
+select a.first_name, b.title
+from employees a natural join titles b
+where b.to_date = '9999-01-01'; -- row 선택 조건
+-- on a.emp_no = b.emp_no 생략
+-- 같은 것 : from employees a join title b on a.emp_no = b.emp_no
 
--- where 절 #1
--- 예제:1991년 이전에 입사한 직원의 이름, 성별, 입사일을 출력
--- order by : 정렬해서 출력하는 것
-select first_name, gender, hire_date
-from employees
-where hire_date < '1991-01-01'
-order by hire_date desc;
+-- 2) join ~ using
+select a.fisrt_name, b.title
+from employees a join titles b using(emp_no)
+where b.to_date = '9999-01-01'; -- row 선택 조건
 
--- where절 #2 : 논리 연산자
--- 예제 : 1989년 이전에 입사한 여직원의 이름, 입사일을 출력하라
-select first_name, gender, hire_date
-from employees
-where  hire_date < '1989-01-01'
-and gender = 'f';
+-- 3) join ~ on
+select a.fisrt_name, b.title
+from employees a join titles b on a.emp_no = b.emp_no
+where b.to_date = '9999-01-01'; -- row 선택 조건
 
--- where절 #3 : in 연산자
--- 예제 : dept_emp 테이블에서 부서 번호가 d005나 d009에 속한 사원의 사번, 부서번호
-select *
-from dept_emp
-where dept_no = 'd005' or dept_no = 'd009';
 
-select emp_no, dept_no
-from dept_emp
-where dept_no in('d005', 'd009');
+-- outer join
+insert into dept values(null, '총무');
+insert into dept values(null, '영업');
+insert into dept values(null, '개발');
+insert into dept values(null, '기획');
+select * from dept;
 
--- where 절 #4 : like 검색
--- 예제: 1989년에 입사한 직원의 이름, 입사일을 출력
-select *
-from employees
-where hire_date >= '1989-01-01' and hire_date <= '1989-12-31'
-order by hire_date asc;
+insert into emp values(null, '둘리', 1);
+insert into emp values(null, '마이콜', 2);
+insert into emp values(null, '또치', 3);
+insert into emp values(null, '길동', null);
+select * from emp;
 
-select first_name, hire_date
-from employees
-where hire_date like '%1989%'
-order by hire_date asc;
+select a.name as '이름', b.name as '부서'
+from emp.a join dept b on a.dept_no = b.no;
 
-select first_name, hire_date
-from employees
-where hire_date between '1989-01-01' and '1989-12-31'
-order by hire_date desc;
+select a.name as '이름', ifnull(b.name, '없음') as '부서'
+from emp.a left join dept b on a.dept_no = b.no;
 
--- order by 절 #1
--- 예제1: 남자 직원의 전체 이름, 성별, 입사일 순(선임순)으로 출력
-select first_name, gender, hire_date
-from employees
-where gender = 'm'
-order by hire_date asc;
+select a.name as '이름', ifnull(b.name, '없음') as '부서'
+from emp.a right join dept b on a.dept_no = b.no;
 
--- order by 절 #1
--- 예제2: 직원들의 사번, 월급을 사번, 월급 순으로 출력하라.
--- 월급이 같은데, 사번(근속년수)이 다른 사람이 나올 수 있으므로.
-select emp_no, salary, from_date, to_date
-from salaries
-order by emp_no asc, salary desc;
+
+-- 실습문제 1
+-- 현재 회사 상황을 반영한 직원별 근무부서를 사번, 이름, 근무 부서로 출력해보세요.
+
+-- 예제 : 현재 직책별로 평균 연봉과 인원수를 구하되, 직책별로 인원이 100명 이상인 직책만 출력하세요.
+select a.title, avg(salary), count(*)
+from titles a, salaries b
+where a.emp_no = b.emp_no
+and a.to_date = '9999-01-01'
+and b.to_date = '9999-01-01'
+group by a.title
+having count(*) >= 100
+order by avg(salary) desc;
+
+-- 예제6 : 현재 부서별로 현재 직책이 Engineer인 직원들에 대해서만 평균급여를 구하세요.
+select * from titles a, departments b where 
