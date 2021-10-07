@@ -1,6 +1,6 @@
 package bookmall.vo;
 
-public class MemberVo {
+public class MembersVo {
 
 	private Long member_no; // 회원번호.
 	private String name;

@@ -1,63 +1,58 @@
 package bookmall.main;
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Scanner;
-
-import bookmall.dao.BookDao;
-import bookmall.dao.CategoryDao;
 import bookmall.dao.test.BookDaoTest;
+import bookmall.dao.test.CartDaoTest;
 import bookmall.dao.test.CategoryDaoTest;
-import bookmall.vo.BookVo;
-import bookmall.vo.CategoryVo;
+import bookmall.dao.test.MemberDaoTest;
+import bookmall.dao.test.OrderDaoTest;
+import bookmall.dao.test.OrderbookDaoTest;
 
 public class BookMall {
 	public static void main(String[] args) {
 
-		while (true) {
-			System.out.println("**********************기본 메뉴**********************");
+		System.out.println("MySQL <데이터베이스 모델링> -JDBC Programming-평가 과제입니다.");
+		System.out.println("총 테이블 6개는 각각 1초의 간격을 두고 실행됩니다.");
+		System.out.println("10초 뒤, 실행됩니다.");
 
-			System.out.println("메뉴를 선택하세요.");
-			System.out.println("1번 : 도서정보 출력");
-			System.out.println("2번 : 카테고리 정보");
-
-			InputStream is = System.in;
-			Scanner scanner = new Scanner(is);
-			Long no = scanner.nextLong();
-
-			if (no == 1L) {
-				displayBookInfo(); // 도서 정보 출력 함수
+		for (int i = 10; i > 0; i--) {
+			try {
+				System.out.print(i + "  ");
+				Thread.sleep(1000); // 1초 대기
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			
-			if (no == 2L) {
-				displayCategoryInfo(); // 도서 정보 출력 함수
-			}
-
 		}
 
-	}
+		// 여러번 실행되면 안됨
+		// PK, FK에 맞춰 순서 정렬해둠.
+		// 순서 바뀌면 안됨.
+		try {
 
-	private static void displayBookInfo() {
-		System.out.println("**********************도서 정보**********************");
+			CategoryDaoTest categoryDaoTest = new CategoryDaoTest();
+			categoryDaoTest.main(args);
+			Thread.sleep(1000); // 1초 대기
 
-		List<BookVo> list = new BookDao().findAll();
-		for (BookVo vo : list) {
-			String info = String.format("[%d] 제목 : %s, \t가격:%s \t카테고리번호:%s", vo.getBook_no(), vo.getTitle(),
-					vo.getPrice(), vo.getCategory_no());
+			BookDaoTest bookDaoTest = new BookDaoTest();
+			bookDaoTest.main(args);
+			Thread.sleep(1000); // 1초 대기
 
-			System.out.println(info);
-		}
+			MemberDaoTest memberDaoTest = new MemberDaoTest();
+			memberDaoTest.main(args);
+			Thread.sleep(1000); // 1초 대기
 
-	}
-	
-	private static void displayCategoryInfo() {
-		System.out.println("**********************카테 고리**********************");
+			CartDaoTest cartDaoTest = new CartDaoTest();
+			cartDaoTest.main(args);
+			Thread.sleep(1000); // 1초 대기
 
-		List<CategoryVo> list = new CategoryDao().findAll();
-		for (CategoryVo vo : list) {
-			String info = String.format("카테고리번호:%d, 카테고리명:%s", vo.getNo(), vo.getName());
+			OrderDaoTest orderDaoTest = new OrderDaoTest();
+			orderDaoTest.main(args);
+			Thread.sleep(1000); // 1초 대기
 
-			System.out.println(info);
+			OrderbookDaoTest orderbookDaoTest = new OrderbookDaoTest();
+			orderbookDaoTest.main(args);
+			Thread.sleep(1000); // 1초 대기
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 
 	}

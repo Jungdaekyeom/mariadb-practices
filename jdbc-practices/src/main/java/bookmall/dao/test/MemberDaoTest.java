@@ -3,44 +3,49 @@ package bookmall.dao.test;
 import java.util.List;
 
 import bookmall.dao.BookDao;
-import bookmall.dao.MemberDao;
+import bookmall.dao.MembersDao;
 import bookmall.vo.BookVo;
-import bookmall.vo.MemberVo;
+import bookmall.vo.MembersVo;
 
 public class MemberDaoTest {
 
 	public static void main(String[] args) {
 		insertTest();
-		// findAllTest();
+		findAllTest();
 	}
 
 	private static void findAllTest() {
-		List<MemberVo> list = new MemberDao().findAll();
-		for (MemberVo vo : list) {
-			System.out.println(vo);
-		}
+		System.out.println("**********************개인 정보**********************");
 
+		List<MembersVo> list = new MembersDao().findAll();
+		for (MembersVo vo : list) {
+			String info = String.format("[%d], 이름:%s, 전화:%s, 메일:%s, 비번:%s", vo.getMember_no(), vo.getName(),
+					vo.getPhone(), vo.getEmail(), vo.getPassword());
+
+			System.out.println(info);
+		}
+		System.out.println("**********************개인 정보**********************\n");
 	}
 
 	private static void insertTest() {
-		MemberVo vo = null;
-		MemberDao dao = new MemberDao();
+		MembersVo vo = null;
+		MembersDao dao = new MembersDao();
 
-		vo = new MemberVo();
-		vo.setName("Monkey D. Luffy");
-		vo.setEmail("Monkey@naver.com");
+		vo = new MembersVo();
+		vo.setName("Luffy");
+		vo.setEmail("Monkey.com");
 		vo.setPassword("1234");
-		vo.setPhone("010-1111-1111");
+		vo.setPhone("1-1");
 		dao.insert(vo);
 
-		vo = new MemberVo();
-		vo.setName("Roronoa Zoro");
-		vo.setEmail("Zoro@gmail.com");
+		vo = new MembersVo();
+		vo.setName("Zoro");
+		vo.setEmail("Roronoa.com");
 		vo.setPassword("5678");
-		vo.setPhone("010-2222-2222");
+		vo.setPhone("2-2");
 		dao.insert(vo);
-		
-		System.out.println("입력 성공");
+
+		System.out.println("Member 입력 성공");
 
 	}
 

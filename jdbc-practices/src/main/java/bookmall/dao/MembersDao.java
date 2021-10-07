@@ -8,12 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bookmall.vo.CartVo;
+import bookmall.vo.MembersVo;
 
-public class CartDao {
-	
-	public List<CartVo> findAll() {
-		List<CartVo> result = new ArrayList<>();
+public class MembersDao {
+	public List<MembersVo> findAll() {
+		List<MembersVo> result = new ArrayList<>();
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -23,7 +22,7 @@ public class CartDao {
 			conn = getConnection();
 
 			// 3. SQL 준비
-			String sql = "select members_no, book_no, amount from cart";
+			String sql = "select no, name, phone, email, password from members";
 			pstmt = conn.prepareStatement(sql);
 
 			// 4. binding
@@ -33,14 +32,18 @@ public class CartDao {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Long members_no = rs.getLong(1);
-				Long book_no = rs.getLong(2);
-				Long amount = rs.getLong(3);
+				String name = rs.getString(2);
+				String phone = rs.getString(3);
+				String email = rs.getString(4);
+				String password = rs.getString(5);
 
-				CartVo vo = new CartVo();
-				vo.setMembers_no(members_no);
-				vo.setBook_no(book_no);
-				vo.setAmount(amount);
-				
+				MembersVo vo = new MembersVo();
+				vo.setMember_no(members_no);
+				vo.setName(name);
+				vo.setPhone(phone);
+				vo.setEmail(email);
+				vo.setPassword(password);
+
 				result.add(vo);
 			}
 		} catch (SQLException e) {
@@ -64,34 +67,25 @@ public class CartDao {
 		return result;
 	}
 
-	public boolean insert(CartVo vo) {
+	public boolean insert(MembersVo vo) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = getConnection();
 
-			// 3. SQL 준비
-			String sql = "insert into cart values(?, ?, ?)";
+			// 3. SQL문 준비
+			String sql = "insert into members values(null, ?, ?, ?, ?);";
 			pstmt = conn.prepareStatement(sql);
 
 			// 4. 바인딩(binding)
-			pstmt.setLong(1, vo.getMembers_no());
-			pstmt.setLong(2, vo.getBook_no());
-			pstmt.setLong(3, vo.getAmount());
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getPhone());
+			pstmt.setString(3, vo.getEmail());
+			pstmt.setString(4, vo.getPassword());
 
-			// 5. SQL 실행
-
-			// executeUpdate()
-			// 1. 수행결과로 Int 타입의 값을 반환합니다.
-			// 2. SELECT 구문을 제외한 다른 구문을 수행할 때 사용되는 함수입니다.
-
-			// executeUpdate 함수를 사용하는 방법입니다.
-			// -> INSERT / DELETE / UPDATE 관련 구문에서는 반영된 레코드의 건수를 반환합니다.
-			// -> CREATE / DROP 관련 구문에서는 -1 을 반환합니다.
-			// 무튼, 무언가가 반횐되었음.
-			// 반환되지 않았다면 여기서 에러가 발생할 것.
+			// 4. SQL 실행
 			int count = pstmt.executeUpdate();
 
 			result = count == 1;
@@ -112,11 +106,11 @@ public class CartDao {
 		}
 
 		return result;
-
 	}
 
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
+
 		try {
 			// 1. JDBC Driver 로딩
 			Class.forName("org.mariadb.jdbc.Driver");
@@ -124,11 +118,11 @@ public class CartDao {
 			// 2. 연결하기
 			String url = "jdbc:mysql://127.0.0.1:3307/bookmall?charset=utf8";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
+
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
 		}
 
 		return conn;
 	}
-
 }

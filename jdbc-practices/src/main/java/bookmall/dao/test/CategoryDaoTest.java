@@ -11,16 +11,20 @@ public class CategoryDaoTest {
 
 	public static void main(String[] args) {
 		insertTest();
-		// findAllTest();
+		findAllTest();
 
 	}
 
 	private static void findAllTest() {
+		System.out.println("**********************카테 고리**********************");
+
 		List<CategoryVo> list = new CategoryDao().findAll();
 		for (CategoryVo vo : list) {
-			System.out.println(vo);
-		}
+			String info = String.format("카테고리번호:%d, 카테고리명:%s", vo.getNo(), vo.getName());
 
+			System.out.println(info);
+		}
+		System.out.println("**********************카테 고리**********************\n");
 	}
 
 	private static void insertTest() {
@@ -39,7 +43,7 @@ public class CategoryDaoTest {
 		vo.setName("무협");
 		dao.insert(vo);
 		
-		System.out.println("입력 성공");
+		System.out.println("Category 입력 성공");
 
 
 	}

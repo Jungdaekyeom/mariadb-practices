@@ -1,6 +1,6 @@
 package bookmall.vo;
 
-public class OrderVo {
+public class OrdersVo {
 	private Long no;
 	private Long members_no;
 	private Long orders_no;

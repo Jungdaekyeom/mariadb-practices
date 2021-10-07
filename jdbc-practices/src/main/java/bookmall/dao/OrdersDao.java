@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bookmall.vo.OrderVo;
+import bookmall.vo.OrdersVo;
 
-public class OrderDao {
-	public List<OrderVo> findAll() {
-		List<OrderVo> result = new ArrayList<>();
+public class OrdersDao {
+	public List<OrdersVo> findAll() {
+		List<OrdersVo> result = new ArrayList<>();
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -37,7 +37,7 @@ public class OrderDao {
 				Long payment = rs.getLong(4);
 				String delevery = rs.getString(5);
 
-				OrderVo vo = new OrderVo();
+				OrdersVo vo = new OrdersVo();
 				vo.setNo(no);
 				vo.setMembers_no(members_no);
 				vo.setOrders_no(orders_no);
@@ -67,7 +67,7 @@ public class OrderDao {
 		return result;
 	}
 
-	public boolean insert(OrderVo vo) {
+	public boolean insert(OrdersVo vo) {
 		boolean result = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -78,18 +78,14 @@ public class OrderDao {
 			// 3. SQL문 준비
 			// 주키는 현재 오토 인크리즈먼트 상태
 			// members_no는 외래키
-			String sql = "insert into orders values(null, ?, ?, ("
-					+ " select b.payment"
-					+ "	from orders a join ("
-					+ "	select b.members_no, (b.amount * a.price) as payment"
-					+ "	from book a"
-					+ "	join cart b on a.no = b.book_no) b on a.members_no = b.members_no), ?)";
+			String sql = "insert into orders values(null, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 
 			// 4. 바인딩(binding)
 			pstmt.setLong(1, vo.getMembers_no());
 			pstmt.setLong(2, vo.getOrders_no());
-			pstmt.setString(3, vo.getDelevery());
+			pstmt.setLong(3, vo.getPayment());
+			pstmt.setString(4, vo.getDelevery());
 
 			// 4. SQL 실행
 			int count = pstmt.executeUpdate();
