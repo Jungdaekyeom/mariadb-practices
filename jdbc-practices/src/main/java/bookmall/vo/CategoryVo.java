@@ -1,23 +1,35 @@
-package test;
+package bookmall.vo;
 
-public class DeptVo {
+public class CategoryVo {
 	private Long no;
 	private String name;
-	
+	/**
+	 * @return the no
+	 */
 	public Long getNo() {
 		return no;
 	}
+	/**
+	 * @param no the no to set
+	 */
 	public void setNo(Long no) {
 		this.no = no;
 	}
+	/**
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
+	/**
+	 * @param name the name to set
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	@Override
 	public String toString() {
-		return "DeptVo [no=" + no + ", name=" + name + "]";
+		return "CategoryVo [no=" + no + ", name=" + name + "]";
 	}
+
 }

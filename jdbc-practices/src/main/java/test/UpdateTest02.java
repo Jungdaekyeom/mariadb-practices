@@ -2,15 +2,15 @@ package test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class UpdateTest01 {
+public class UpdateTest02 {
 
 	public static void main(String[] args) {
 
 		DeptVo vo = new DeptVo();
-		vo.setNo(8L);
+		vo.setNo(11L);
 		vo.setName("전략기획팀");
 
 		Boolean result = update(vo);
@@ -22,7 +22,7 @@ public class UpdateTest01 {
 	private static Boolean update(DeptVo vo) {
 
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		boolean result = false;
 
 		try {
@@ -34,14 +34,17 @@ public class UpdateTest01 {
 			String url = "jdbc:mysql://127.0.0.1:3307/employees?charset=utf8";
 			conn = DriverManager.getConnection(url, "hr", "hr");
 
-			// 3. Statement 생성
-			stmt = conn.createStatement();
-
-			// 4. SQL 실행
-			// String sql = "insert into dept values(null, '총무');";
-			String sql = "update dept " + "set name ='" + vo.getName() + "'" + "where no =" + vo.getNo();
-			int count = stmt.executeUpdate(sql);
-
+			//3. SQL 준비
+			String sql = "update dept set name=? where no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. binding
+			pstmt.setString(1, vo.getName());
+			pstmt.setLong(2, vo.getNo());
+			
+			//5. SQL 실행
+			int count = pstmt.executeUpdate();
+			
 			result = count == 1;
 
 		} catch (ClassNotFoundException e) {
@@ -54,16 +57,15 @@ public class UpdateTest01 {
 				if (conn != null) {
 					conn.close(); // 커넥션 테스트
 				}
-
-				if (stmt != null) {
-					stmt.close(); // 커넥션 테스트
+				
+				if (pstmt != null) {
+					pstmt.close(); // 커넥션 테스트
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		
 		return result;
 	}
 

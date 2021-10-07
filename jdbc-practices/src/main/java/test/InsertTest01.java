@@ -35,7 +35,7 @@ public class InsertTest01 {
 
 			// 4. SQL 실행
 			// String sql = "insert into dept values(null, '총무');";
-			String sql = "insert into dept values('5', '" + name + "');";
+			String sql = "insert into dept values(null, '" + name + "')";
 			int count = stmt.executeUpdate(sql);
 
 			result = count == 1;

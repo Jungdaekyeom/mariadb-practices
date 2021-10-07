@@ -15,10 +15,10 @@ public class DeleteTest01 {
 	}
 
 	private static Boolean delete(long no) {
-		
+
+		boolean result = false;
 		Connection conn = null;
 		Statement stmt = null;
-		boolean result = false;
 
 		try {
 			// 1. JDBC Driver 로딩
@@ -26,7 +26,7 @@ public class DeleteTest01 {
 
 			// 2. 연결하기
 			// 연결 url 필요
-			String url = "jdbc:mysql://127.0.0.1:3307/webdb";
+			String url = "jdbc:mysql://127.0.0.1:3307/employees?charset=utf8";
 			conn = DriverManager.getConnection(url, "hr", "hr");
 
 			// 3. Statement 생성
@@ -34,7 +34,7 @@ public class DeleteTest01 {
 
 			// 4. SQL 실행
 			// String sql = "insert into dept values(null, '총무');";
-			String sql = "delete from dept where no = " + no;
+			String sql = "delete from dept where no=" + no;
 			int count = stmt.executeUpdate(sql);
 
 			result = count == 1;
@@ -46,15 +46,17 @@ public class DeleteTest01 {
 		} finally {
 			// clean up
 			try {
+				if (stmt != null) {
+					stmt.close();
+				}
 				if (conn != null) {
-					conn.close(); // 커넥션 테스트
+					conn.close();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		return result;
 	}
 

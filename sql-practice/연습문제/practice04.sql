@@ -29,8 +29,12 @@ group by dept_name
 order by 연봉 desc;
 
 -- 서브 쿼리를 써서 품
+-- 1. 각 부서별로 급여를 받는 사람들 목록
+-- 2. 그 중에서 max값을 출력
 select a.emp_no as 사번, concat(a.first_name, ' ', a.last_name) as 이름, c.dept_name as 부서, max(d.salary) as 연봉;
 
+
+select * from employees a join salaries b on a.emp_no = b.emp_no;
 
 
 -- 문제3.

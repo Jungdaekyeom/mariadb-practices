@@ -2,28 +2,24 @@ package test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class UpdateTest01 {
-
+public class InsertTest02 {
 	public static void main(String[] args) {
 
-		DeptVo vo = new DeptVo();
-		vo.setNo(8L);
-		vo.setName("전략기획팀");
+		insert("영업");
+		insert("개발");
+		insert("기획");
 
-		Boolean result = update(vo);
-		if (result) {
-			System.out.println("성공!");
-		}
 	}
 
-	private static Boolean update(DeptVo vo) {
+	private static boolean insert(String name) {
 
-		Connection conn = null;
-		Statement stmt = null;
 		boolean result = false;
+		Connection conn = null;
+		// Statement의 상위호환
+		PreparedStatement pstmt = null;
 
 		try {
 			// 1. JDBC Driver 로딩
@@ -34,13 +30,16 @@ public class UpdateTest01 {
 			String url = "jdbc:mysql://127.0.0.1:3307/employees?charset=utf8";
 			conn = DriverManager.getConnection(url, "hr", "hr");
 
-			// 3. Statement 생성
-			stmt = conn.createStatement();
+			// 3. SQL문 준비
+			// String sql = "insert into dept values(null, ?);";
+			String sql = "insert into dept values(null, ?);";
+			pstmt = conn.prepareStatement(sql);
 
-			// 4. SQL 실행
-			// String sql = "insert into dept values(null, '총무');";
-			String sql = "update dept " + "set name ='" + vo.getName() + "'" + "where no =" + vo.getNo();
-			int count = stmt.executeUpdate(sql);
+			// 4. 바인딩(binding)
+			pstmt.setString(1, name);
+
+			// 5. SQL 실행
+			int count = pstmt.executeUpdate();
 
 			result = count == 1;
 
@@ -55,15 +54,14 @@ public class UpdateTest01 {
 					conn.close(); // 커넥션 테스트
 				}
 
-				if (stmt != null) {
-					stmt.close(); // 커넥션 테스트
+				if (pstmt != null) {
+					pstmt.close(); // 커넥션 테스트
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
+		
 		return result;
 	}
 
