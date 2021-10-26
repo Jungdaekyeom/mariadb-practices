@@ -144,7 +144,7 @@ public class EmployeeDao {
 			Class.forName("org.mariadb.jdbc.Driver");
 
 			// 2. 연결하기
-			String url = "jdbc:mysql://127.0.0.1:3306/employees?charset=utf8";
+			String url = "jdbc:mysql://127.0.0.1:3307/employees?charset=utf8";
 			conn = DriverManager.getConnection(url, "hr", "hr");
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
