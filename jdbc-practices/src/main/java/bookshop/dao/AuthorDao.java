@@ -107,7 +107,7 @@ public class AuthorDao {
 			Class.forName("org.mariadb.jdbc.Driver");
 
 			// 2. 연결하기
-			String url = "jdbc:mysql://127.0.0.1:3307/webdb?charset=utf8";
+			String url = "jdbc:mysql://127.0.0.1:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
 		} catch (ClassNotFoundException e) {

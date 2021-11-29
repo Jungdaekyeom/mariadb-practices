@@ -116,7 +116,7 @@ public class MembersDao {
 			Class.forName("org.mariadb.jdbc.Driver");
 
 			// 2. 연결하기
-			String url = "jdbc:mysql://127.0.0.1:3307/bookmall?charset=utf8";
+			String url = "jdbc:mysql://127.0.0.1:3306/bookmall?charset=utf8";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 
 		} catch (ClassNotFoundException e) {
